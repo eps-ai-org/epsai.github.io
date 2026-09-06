@@ -13,17 +13,26 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: read
+
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
+
       - run: npm ci
+
       - name: Read Pages configuration
         id: pages
         if: github.event_name != 'pull_request'
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
+
       - name: Resolve deployment URL
         env:
           PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
@@ -31,20 +40,34 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import { appendFileSync } from 'node:fs';
+
           const [owner, repository] = process.env.GITHUB_REPOSITORY.split('/');
-          const origin = process.env.PAGES_ORIGIN || `https://${owner.toLowerCase()}.github.io`;
+
+          const origin =
+            process.env.PAGES_ORIGIN ||
+            `https://${owner.toLowerCase()}.github.io`;
+
           const base = process.env.PAGES_ORIGIN
             ? process.env.PAGES_BASE_PATH
-            : repository.toLowerCase() === `${owner.toLowerCase()}.github.io` ? '' : `/${repository}`;
-          appendFileSync(process.env.GITHUB_ENV, `SITE_ORIGIN=${origin}\nBASE_PATH=${base}\n`);
+            : repository.toLowerCase() === `${owner.toLowerCase()}.github.io`
+              ? ''
+              : `/${repository}`;
+
+          appendFileSync(
+            process.env.GITHUB_ENV,
+            `SITE_ORIGIN=${origin}\nBASE_PATH=${base}\n`
+          );
           NODE
+
       - name: Check, compile, and validate static output
         run: npm run build
+
       - name: Test root and repository URLs
         run: npm test
+
       - name: Upload validated site
         if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -52,15 +75,19 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+
     permissions:
       pages: write
       id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     concurrency:
       group: github-pages
       cancel-in-progress: false
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
