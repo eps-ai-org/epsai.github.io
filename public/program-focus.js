@@ -5,7 +5,10 @@
     const updateHero = () => {
       const distance = Math.max(hero.offsetHeight * 0.441, 1);
       const progress = Math.min(1, Math.max(0, window.scrollY / distance));
-      hero.style.setProperty('--hero-video-inset', `${35 - 67 * progress}px`);
+      const startWidth = hero.clientWidth - 70;
+      const finalWidth = Math.min(hero.clientWidth * 1.1, window.innerWidth - 64);
+      hero.style.setProperty('--hero-video-width', `${startWidth + (finalWidth - startWidth) * progress}px`);
+      hero.style.setProperty('--hero-video-y', `${35 - 67 * progress}px`);
     };
     const scheduleHero = () => {
       if (heroScheduled) return;

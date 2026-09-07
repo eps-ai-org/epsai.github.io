@@ -80,8 +80,7 @@ function Organizers({ config }: { config: SiteConfig }) {
     <h2 id="organizers-title">{content.organizers.heading}</h2>
     <div className="organizer-grid">{content.organizers.items.map((organizer) => {
       const logo = organizer.logo;
-      const organizerClass = organizer.name === 'IOAI Spain' ? ' organizer-card-ioai-spain' : '';
-      return <a key={organizer.name} className={`organizer-card${organizerClass}`} href={organizer.url}>
+      return <a key={organizer.name} className="organizer-card" href={organizer.url}>
         {logo ? <img src={url.href(logo.src)} width={logo.width} height={logo.height} alt={logo.alt} loading="lazy" decoding="async" /> : <><span>{organizer.name}</span><small>Logo placeholder</small></>}
       </a>;
     })}</div>

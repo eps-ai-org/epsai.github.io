@@ -51,7 +51,7 @@ export const content = {
     heading: 'Great AI education grows together.',
     media: {
       kind: 'video',
-      src: 'https://ioai-official.org/wp-content/uploads/2026/08/IMG_9007.mov',
+      src: 'initiative-video.mp4',
       label: 'εai.org introduction video',
       width: 1920,
       height: 1080,
@@ -65,7 +65,7 @@ export const content = {
     heading: 'What we have built',
     media: {
       kind: 'video',
-      src: 'https://ioai-official.org/wp-content/uploads/2026/08/IMG_9007.mov',
+      src: 'initiative-video.mp4',
       label: 'εai.org results video',
       width: 1920,
       height: 1080,
