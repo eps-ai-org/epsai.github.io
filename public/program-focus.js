@@ -3,12 +3,15 @@
   if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let heroScheduled = false;
     const updateHero = () => {
+      const isMobile = matchMedia('(max-width: 760px)').matches;
+      const startInset = isMobile ? 17.5 : 35;
+      const viewportInset = isMobile ? 16 : 32;
       const distance = Math.max(hero.offsetHeight * 0.441, 1);
       const progress = Math.min(1, Math.max(0, window.scrollY / distance));
-      const startWidth = hero.clientWidth - 70;
-      const finalWidth = Math.min(hero.clientWidth * 1.1, window.innerWidth - 64);
+      const startWidth = hero.clientWidth - startInset * 2;
+      const finalWidth = Math.max(hero.clientWidth, Math.min(hero.clientWidth * 1.167, window.innerWidth - viewportInset * 2));
       hero.style.setProperty('--hero-video-width', `${startWidth + (finalWidth - startWidth) * progress}px`);
-      hero.style.setProperty('--hero-video-y', `${35 - 67 * progress}px`);
+      hero.style.setProperty('--hero-video-y', `${startInset - (startInset + 32) * progress}px`);
     };
     const scheduleHero = () => {
       if (heroScheduled) return;
@@ -26,9 +29,12 @@
 
 (() => {
   const grid = document.querySelector('#programs .program-grid');
+  const leadVisual = document.querySelector('#programs .program-visual-before');
+  const tailVisual = document.querySelector('#programs .program-visual-after');
   const cards = [...document.querySelectorAll('[data-program-card]')];
   const visuals = [...document.querySelectorAll('[data-program-visual]')];
-  if (!grid || cards.length !== 4 || !visuals.length) return;
+  if (!grid || !leadVisual || !tailVisual || cards.length !== 4 || !visuals.length) return;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let active = -1;
   const activate = (index) => {
@@ -43,22 +49,35 @@
   };
 
   const update = () => {
-    const rect = grid.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.72;
-    const endLine = window.innerHeight * 0.46;
-    if (rect.top > startLine) {
-      activate(0);
+    const isPhone = matchMedia('(max-width: 540px)').matches;
+    if (isPhone) {
+      const leadRect = leadVisual.getBoundingClientRect();
+      const tailRect = tailVisual.getBoundingClientRect();
+      const startTop = window.innerHeight - leadRect.height - window.innerHeight * 0.367;
+      const distanceToStart = leadRect.top - startTop;
+      const distanceToEnd = tailRect.top - window.innerHeight * 0.367;
+      const travel = Math.max(distanceToEnd - distanceToStart, 1);
+      const rawProgress = -distanceToStart / travel;
+      const progress = Math.min(1, Math.max(0, rawProgress));
+      if (!reduceMotion) grid.style.setProperty('--rainbow-angle', `${110 + progress * 112.5}deg`);
+      if (rawProgress >= 1) activate(3);
+      else if (rawProgress >= 0.5) activate(2);
+      else if (rawProgress >= 0) activate(1);
+      else activate(0);
       return;
     }
-    if (rect.bottom < endLine) {
-      activate(cards.length - 1);
-      return;
-    }
-    const travel = Math.max(rect.height + startLine - endLine, 1);
-    const progress = Math.min(0.999, Math.max(0, (startLine - rect.top) / travel));
-    if (progress >= 0.58) activate(3);
-    else if (progress >= 0.37037) activate(2);
-    else if (progress >= 0.185185) activate(1);
+
+    const visualRect = leadVisual.getBoundingClientRect();
+    const tileHeight = cards[0].getBoundingClientRect().height;
+    const startTop = window.innerHeight - visualRect.height - tileHeight - 32;
+    const endTop = 67;
+    const travel = Math.max(startTop - endTop, 1);
+    const rawProgress = (startTop - visualRect.top) / travel;
+    const progress = Math.min(1, Math.max(0, rawProgress));
+    if (!reduceMotion) grid.style.setProperty('--rainbow-angle', `${110 + progress * 112.5}deg`);
+    if (rawProgress >= 1) activate(3);
+    else if (rawProgress >= 0.5) activate(2);
+    else if (rawProgress >= 0) activate(1);
     else activate(0);
   };
 
