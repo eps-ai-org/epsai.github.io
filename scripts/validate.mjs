@@ -12,7 +12,9 @@ async function walk(directory) {
 export async function validateOutput(directory, config) {
   const root = resolve(directory);
   const files = await walk(root);
-  assert(!files.some((file) => /\.(?:[cm]?js|map|tsx?)$/.test(file)), 'Only static assets belong in dist; found JavaScript or source files.');
+  const scripts = files.filter((file) => /\.[cm]?js$/.test(file));
+  assert.deepEqual(scripts.map((file) => file.slice(root.length + 1)), ['program-focus.js'], 'Only the program focus interaction may ship as JavaScript.');
+  assert(!files.some((file) => /\.(?:map|tsx?)$/.test(file)), 'Source files do not belong in dist.');
   const homepage = await readFile(join(root, 'index.html'), 'utf8');
   for (const id of ['about', 'results', 'programs', 'contact', 'organizers']) {
     assert(homepage.includes(`id="${id}"`), `Homepage is missing #${id}.`);
@@ -28,9 +30,13 @@ export async function validateOutput(directory, config) {
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
     assert.equal(new Set(ids).size, ids.length, `Duplicate IDs: ${file}`);
     for (const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
-      assert(script[1].includes('type="application/ld+json"'), 'Executable scripts must not ship.');
-      const data = JSON.parse(script[2]);
-      assert.equal(data.url, homepageUrl, 'JSON-LD URL does not match deployment.');
+      if (script[1].includes('type="application/ld+json"')) {
+        const data = JSON.parse(script[2]);
+        assert.equal(data.url, homepageUrl, 'JSON-LD URL does not match deployment.');
+      } else {
+        assert(script[1].includes('src=') && script[1].includes('program-focus.js') && script[1].includes('defer'), 'Unexpected executable script.');
+        assert.equal(script[2].trim(), '', 'The interaction script must remain external.');
+      }
     }
     for (const match of html.matchAll(/\s(?:href|src|poster)="([^"]+)"/g)) {
       const reference = match[1].replaceAll('&amp;', '&');
@@ -52,9 +58,11 @@ export async function validateOutput(directory, config) {
   const css = await readFile(cssFiles[0], 'utf8');
   assert(!/@import\s/.test(css), 'CSS must be fully compiled.');
   assert(!/https?:\/\//.test(css.replace(/\/\*[\s\S]*?\*\//g, '')), 'No external CSS resources should load.');
-  const sizes = { html: gzipSync(homepage).length, css: gzipSync(css).length };
+  const interaction = await readFile(scripts[0]);
+  const sizes = { html: gzipSync(homepage).length, css: gzipSync(css).length, js: gzipSync(interaction).length };
   assert(sizes.html <= 35 * 1024, `HTML exceeds 35 KiB gzip: ${sizes.html}`);
   assert(sizes.css <= 20 * 1024, `CSS exceeds 20 KiB gzip: ${sizes.css}`);
+  assert(sizes.js <= 3 * 1024, `Interaction JavaScript exceeds 3 KiB gzip: ${sizes.js}`);
   for (const name of ['sitemap.xml', 'robots.txt', 'llms.txt']) {
     assert((await readFile(join(root, name), 'utf8')).includes(homepageUrl), `${name} must use the deployment URL.`);
   }

@@ -9,7 +9,7 @@ export interface ImageAsset {
 export interface VideoAsset {
   kind: 'video';
   src: string;
-  poster: string;
+  poster?: string;
   label: string;
   width: number;
   height: number;
@@ -27,6 +27,7 @@ export interface Achievement {
 export interface Offer {
   title: string;
   description: string;
+  image: ImageAsset;
 }
 
 export interface Organizer {
@@ -46,38 +47,44 @@ export const content = {
   accessibleName: 'εai.org (epsilon ai dot org)',
   title: 'εai.org — International collaboration for AI olympiads',
   description: 'A collaboration between AI olympiad organizers, sharing education, resources, camps, and practical experience.',
-  navigation: [
-    { label: 'About', id: 'about' },
-    { label: 'Results', id: 'results' },
-    { label: 'Programs', id: 'programs' },
-    { label: 'Contact', id: 'contact' },
-  ],
   hero: {
     heading: 'Great AI education grows together.',
-    media: null as MediaAsset | null,
+    media: {
+      kind: 'video',
+      src: 'https://ioai-official.org/wp-content/uploads/2026/08/IMG_9007.mov',
+      label: 'εai.org introduction video',
+      width: 1920,
+      height: 1080,
+    } satisfies VideoAsset,
     mediaLabel: 'Title video placeholder',
   },
   about: {
     paragraph: 'We help national AI olympiad organizers build stronger competitions, share educational resources, and create better opportunities for students.',
   },
   results: {
-    heading: 'What we’ve built',
-    media: null as MediaAsset | null,
+    heading: 'What we have built',
+    media: {
+      kind: 'video',
+      src: 'https://ioai-official.org/wp-content/uploads/2026/08/IMG_9007.mov',
+      label: 'εai.org results video',
+      width: 1920,
+      height: 1080,
+    } satisfies VideoAsset,
     mediaLabel: 'Results video placeholder',
     achievements: [
       { stat: 'X', title: 'Gold medals', description: 'For Tenerife camp participants' },
       { stat: 'X', title: 'Gold medalists', description: 'International medalists learning and training together' },
-      { stat: 'X', title: 'Coaches', description: 'Experienced coaches sharing methods across national teams' },
+      { stat: 'X', title: 'Countries', description: 'Participating in the camp’s first year' },
       { stat: '100+', title: 'Students in Tenerife', description: 'Two weeks of AI training, practice, and exchange' },
     ] satisfies Achievement[],
   },
   programs: {
     heading: 'How we can work together',
     items: [
-      { title: 'Online education', description: 'Shared learning for students preparing for AI olympiads.' },
-      { title: 'National olympiads', description: 'Support with selection rounds, finals, team selection, and training.' },
-      { title: 'Training camps', description: 'Focused preparation with students, mentors, and national teams.' },
-      { title: 'Other collaboration', description: 'Bring us an idea, a challenge, or a resource. We are open.' },
+      { title: 'Online education', description: 'Shared learning for students preparing for AI olympiads.', image: { kind: 'image', src: 'program-online.jpg', alt: 'Students learning together with an online mentor', width: 1600, height: 900 } },
+      { title: 'National olympiads', description: 'Support with selection rounds, finals, team selection, and training.', image: { kind: 'image', src: 'program-olympiad.jpg', alt: 'Olympiad organizers planning a national competition', width: 1600, height: 900 } },
+      { title: 'Training camps', description: 'Focused preparation with students, mentors, and national teams.', image: { kind: 'image', src: 'program-camp.jpg', alt: 'Students and coaches working at an international training camp', width: 1600, height: 900 } },
+      { title: 'Other collaboration', description: 'Bring us an idea, a challenge, or a resource. We are open.', image: { kind: 'image', src: 'program-collaboration.jpg', alt: 'Educators and students beginning a new collaboration', width: 1600, height: 900 } },
     ] satisfies Offer[],
   },
   contact: {

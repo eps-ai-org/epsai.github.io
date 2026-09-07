@@ -53,7 +53,7 @@ try {
   await writeFile(join(output, 'llms.txt'), llms);
   const sizes = await validateOutput(output, config);
   console.log(`\nBuilt ${url.absolute()} → dist/`);
-  console.log(`Gzip: HTML ${sizes.html} bytes · CSS ${sizes.css} bytes · application JavaScript 0 bytes`);
+  console.log(`Gzip: HTML ${sizes.html} bytes · CSS ${sizes.css} bytes · interaction JavaScript ${sizes.js} bytes`);
 } catch (error) {
   console.error(error);
   process.exitCode = 1;
