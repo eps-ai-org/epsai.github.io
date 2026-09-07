@@ -6,12 +6,26 @@
       const isMobile = matchMedia('(max-width: 760px)').matches;
       const startInset = isMobile ? 17.5 : 35;
       const viewportInset = isMobile ? 16 : 32;
-      const distance = Math.max(hero.offsetHeight * 0.441, 1);
+      const distance = Math.max(hero.offsetHeight * 0.396, 1);
       const progress = Math.min(1, Math.max(0, window.scrollY / distance));
-      const startWidth = hero.clientWidth - startInset * 2;
       const finalWidth = Math.max(hero.clientWidth, Math.min(hero.clientWidth * 1.167, window.innerWidth - viewportInset * 2));
-      hero.style.setProperty('--hero-video-width', `${startWidth + (finalWidth - startWidth) * progress}px`);
-      hero.style.setProperty('--hero-video-y', `${startInset - (startInset + 32) * progress}px`);
+      const contactProgress = startInset / (startInset + 32);
+      const verticalInset = startInset - (startInset + 32) * progress;
+      let synchronizedWidth;
+      let horizontalWidth;
+      if (progress <= contactProgress) {
+        const contactPhase = progress / contactProgress;
+        const startWidth = hero.clientWidth - startInset * 2;
+        synchronizedWidth = hero.clientWidth - Math.max(verticalInset, 0) * 2;
+        horizontalWidth = startWidth + (hero.clientWidth - startWidth) * Math.sqrt(contactPhase);
+      } else {
+        const expansionProgress = (progress - contactProgress) / (1 - contactProgress);
+        synchronizedWidth = hero.clientWidth + (finalWidth - hero.clientWidth) * expansionProgress;
+        horizontalWidth = hero.clientWidth + (finalWidth - hero.clientWidth) * Math.sqrt(expansionProgress);
+      }
+      const videoWidth = synchronizedWidth * 0.8 + horizontalWidth * 0.2;
+      hero.style.setProperty('--hero-video-width', `${videoWidth}px`);
+      hero.style.setProperty('--hero-video-y', `${verticalInset}px`);
     };
     const scheduleHero = () => {
       if (heroScheduled) return;
