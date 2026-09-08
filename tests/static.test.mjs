@@ -14,7 +14,7 @@ test('URLs work at an origin root and under a repository path', () => {
     const pages = renderPages(config, 'assets/site.css');
     const html = pages.find((page) => page.file === 'index.html').html;
     assert(html.includes(`href="${expectedBase}/assets/site.css"`));
-    assert(html.includes(`href="${expectedBase}/favicon.svg"`));
+    assert(html.includes(`href="${expectedBase}/icons/favicon.svg"`));
     assert(html.includes(`href="https://example.github.io${expectedBase}/"`));
     const notFound = pages.find((page) => page.file === '404.html').html;
     assert(notFound.includes(`href="${expectedBase}/"`));
@@ -39,7 +39,7 @@ test('static content uses only the focused-program interaction script', () => {
   const html = renderPages(config, 'assets/site.css')[0].html;
   assert.equal((html.match(/<script\b/g) || []).length, 2);
   assert(html.includes('<script type="application/ld+json">'));
-  assert(html.includes('src="/program-focus.js"'));
+  assert(html.includes('src="/scripts/program-focus.js"'));
   assert(!/\son[a-z]+="/i.test(html));
   if (content.contact.email === null) assert(!html.includes('mailto:'));
   if ([content.hero.media, content.results.media].every((asset) => asset === null)) {
