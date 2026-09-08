@@ -67,7 +67,7 @@ export const content = {
     heading: 'What we have built',
     media: {
       kind: 'video',
-      src: 'videos/initiative.mp4',
+      src: 'videos/io1.mp4',
       label: 'εai.org results video',
       width: 1920,
       height: 1080,
