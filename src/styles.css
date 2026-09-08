@@ -52,7 +52,7 @@
   .media-filled img, .media-filled video { width: 100%; height: 100%; object-fit: cover; }
   .hero-video-expander { position: absolute; top: var(--hero-video-y, 35px); bottom: var(--hero-video-y, 35px); left: 50%; width: var(--hero-video-width, calc(100% - 70px)); overflow: hidden; border-radius: 4px; transform: translateX(-50%); }
   .hero-video-expander video { width: 100%; height: 100%; max-width: none; object-fit: cover; }
-  .media-filled .media-title { position: absolute; z-index: 2; inset-inline: 32px; }
+  .media-filled .media-title { position: absolute; z-index: 2; inset-inline: 32px; margin-inline: auto; }
 
   .content-section { border-bottom: 1px solid #d4d4ce; }
   .content-section h2 { font-size: clamp(28px, 3.84vw, 44px); line-height: 1; font-weight: 600; letter-spacing: -.055em; }
