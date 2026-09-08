@@ -35,9 +35,9 @@ export function Document({ config, stylesheet, title, description, children, ind
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <link rel="icon" type="image/svg+xml" href={url.href('favicon.svg')} />
+        <link rel="icon" type="image/svg+xml" href={url.href('icons/favicon.svg')} />
         <link rel="stylesheet" href={url.href(stylesheet)} />
-        <script src={url.href('program-focus.js')} defer />
+        <script src={url.href('scripts/program-focus.js')} defer />
         {indexable && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />}
       </head>
       <body>{children}</body>

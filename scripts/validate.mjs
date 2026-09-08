@@ -13,7 +13,7 @@ export async function validateOutput(directory, config) {
   const root = resolve(directory);
   const files = await walk(root);
   const scripts = files.filter((file) => /\.[cm]?js$/.test(file));
-  assert.deepEqual(scripts.map((file) => file.slice(root.length + 1)), ['program-focus.js'], 'Only the program focus interaction may ship as JavaScript.');
+  assert.deepEqual(scripts.map((file) => file.slice(root.length + 1)), ['scripts/program-focus.js'], 'Only the program focus interaction may ship as JavaScript.');
   assert(!files.some((file) => /\.(?:map|tsx?)$/.test(file)), 'Source files do not belong in dist.');
   const homepage = await readFile(join(root, 'index.html'), 'utf8');
   for (const id of ['about', 'results', 'programs', 'contact', 'organizers']) {

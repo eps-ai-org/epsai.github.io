@@ -9,6 +9,6 @@ createRoot(root).render(<Home config={{ origin: window.location.origin, basePath
 
 requestAnimationFrame(() => {
   const interaction = document.createElement('script');
-  interaction.src = '/program-focus.js';
+  interaction.src = '/scripts/program-focus.js';
   document.head.append(interaction);
 });
