@@ -1,4 +1,7 @@
 (() => {
+  document.querySelectorAll('.media-results video').forEach((video) => {
+    video.addEventListener('play', () => video.closest('.media').classList.add('has-played'), { once: true });
+  });
   const hero = document.querySelector('.media-hero.media-filled');
   if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let heroScheduled = false;

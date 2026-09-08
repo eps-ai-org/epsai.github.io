@@ -25,6 +25,7 @@ export function Media({ config, asset, label, variant, heading }: MediaProps) {
     return <figure className={`media media-${variant} media-filled`}>
       {variant === 'hero' && asset.kind === 'video' ? <div className="hero-video-expander">{renderedAsset}</div> : renderedAsset}
       {heading && <p className="media-title" aria-hidden="true">{heading}</p>}
+      {asset.kind === 'video' && asset.previewText && <p className="video-preview-text">{asset.previewText}</p>}
     </figure>;
   }
   return <figure className={`media media-${variant}`} aria-label={label}>

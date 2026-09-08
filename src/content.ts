@@ -10,6 +10,7 @@ export interface VideoAsset {
   kind: 'video';
   src: string;
   poster?: string;
+  previewText?: string;
   label: string;
   width: number;
   height: number;
@@ -68,6 +69,8 @@ export const content = {
     media: {
       kind: 'video',
       src: 'videos/io1.mp4',
+      poster: 'images/io1-poster.jpg',
+      previewText: 'Andris, Silver, and Tenerife!',
       label: 'εai.org results video',
       width: 1920,
       height: 1080,
