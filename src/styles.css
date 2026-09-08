@@ -57,7 +57,7 @@
   .content-section { border-bottom: 1px solid #d4d4ce; }
   .content-section h2 { font-size: clamp(28px, 3.84vw, 44px); line-height: 1; font-weight: 600; letter-spacing: -.055em; }
   .about-section { padding-block: 86px; }
-  .about-lead { font-family: Georgia, "Times New Roman", serif; font-size: clamp(18px, 2.45vw, 26px); font-style: italic; line-height: 1.28; letter-spacing: -.025em; }
+  .about-lead { font-family: Georgia, "Times New Roman", serif; font-size: clamp(21px, 2.45vw, 26px); font-style: italic; line-height: 1.28; letter-spacing: -.025em; }
   .section-rule { height: 1px; background: #d4d4ce; }
 
   .results-section { padding-block: 94px; }
